@@ -1,0 +1,94 @@
+
+PROC reloc:(ptr%)
+	local rel%,relc%,s%
+	local d%,sptr%,id$(8)
+	local hlen%
+	
+	sptr%=addr(id$)
+	relc%=ptr%
+	
+	pokeb sptr%,8
+	s%=0 
+	while s%<8
+		sptr%=uadd(sptr%,1)
+		pokeb sptr%,peekb(relc%)
+		relc%=uadd(relc%,1)
+		s%=s%+1
+	endwh
+	
+	if id$<>"S3AsmOPL" : raise -69 : endif
+	
+	hlen%=peekw(relc%)
+	sptr%=uadd(ptr%,hlen%+2)
+
+	s%=peekw(uadd(ptr%,hlen%))
+	relc%=uadd(sptr%,s%)
+	rel%=peekw(relc%)
+	relc%=uadd(relc%,2)
+
+
+	while rel%
+		d%=uadd(sptr%,peekw(relc%))
+		relc%=uadd(relc%,2)
+		pokew d%,uadd(peekw(d%),sptr%)
+		rel%=rel%-1
+	endwh
+
+	return sptr%
+ENDP
+
+PROC loado:(f$)
+	local r%,h%,cell%,size%,pos&
+	local relc%,rel%,d%,id$(8)
+
+	r%=IOOPEN(h%,f$,$0400+$0200)
+	if r%>=0
+		pokeb addr(id$),8
+		r%=IOREAD(h%,addr(id$)+1,8)
+		if id$<>"S3AsmObj"
+			raise -69
+		endif
+		r%=IOREAD(h%,addr(d%),2)
+		pos&=d%
+		r%=IOSEEK(h%,1,pos&)
+		r%=IOREAD(h%,addr(size%),2)
+
+		cell%=alloc:(size%)
+		if cell%=0
+			IOCLOSE(h%)
+			raise -10
+		endif
+		r%=IOREAD(h%,cell%,size%)
+		r%=IOREAD(h%,addr(rel%),2)
+		if rel%
+			relc%=alloc:(rel%*2)
+			if relc%=0
+				IOCLOSE(h%)
+				raise -10
+			endif
+
+			r%=IOREAD(h%,relc%,rel%*2)
+			while rel%<>0
+				d%=uadd(cell%,peekw(relc%))
+				relc%=uadd(relc%,2)
+				pokew d%,uadd(peekw(d%),cell%)
+				rel%=rel%-1
+			endwh
+		endif
+		IOCLOSE(h%)
+		if r%>0
+			return cell%
+		endif		
+	endif
+	raise r%
+ENDP
+
+PROC alloc:(size%)
+	local ret%
+	ret%=alloc(size%)
+	if ret%=0
+			raise -10
+	endif
+	return(ret%)
+ENDP
+

@@ -1,0 +1,22 @@
+Rem
+Rem Window server example OPL stub
+Rem (c)1993 Krister Wombell
+Rem
+
+PROC start:
+	global	wi%,ib%(64),wa%,a$(15),a%,gi%(32),i%
+
+	gupdate	off
+	ginfo gi%()
+
+	loadm "\opo\s3obj.opo"
+	wa%=loado:("b:\asm\win.bin")
+	ib%(1)=gi%(31)
+	ib%(2)=addr(a$)
+	a%=usr(wa%,addr(ib%(1)),0,0,0)
+	while 1
+		a%=usr(wa%,addr(ib%(1)),2,0,0)
+		gupdate
+	endwh
+ENDP
+

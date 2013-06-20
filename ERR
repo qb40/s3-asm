@@ -1,0 +1,33 @@
+
+PKUNZIP (R)    FAST!    Extract Utility    Version 2.04g  02-01-93
+Copr. 1989-1993 PKWARE Inc. All Rights Reserved. Shareware Version
+PKUNZIP Reg. U.S. Pat. and Tm. Off.
+
+þ 80486 CPU detected.
+þ EMS version 4.00 detected.
+þ XMS version 3.00 detected.
+
+Searching ZIP: S3ASM2.ZIP
+
+ Length  Method   Size  Ratio   Date    Time    CRC-32  Attr  Name
+ ------  ------   ----- -----   ----    ----   -------- ----  ----
+  41295  DeflatN  20956  50%  06-02-94  17:38  6323ace6 --w-  S3ASM.OPA
+    680  DeflatN    284  59%  02-07-06  02:44  fc402fd7 --w-  ASM.ALS
+   1014  DeflatN    402  61%  09-30-93  11:00  dbea67db --w-  DBF.INC
+   1506  DeflatN    545  64%  06-02-94  16:38  34df6b27 --w-  S3OBJ.OPL
+   1478  DeflatN    531  65%  09-30-93  11:00  2cad3d48 --w-  PROC.INC
+    880  DeflatN    380  57%  09-30-93  11:00  6372b24e --w-  MEM.INC
+   3200  DeflatN    995  69%  09-30-93  11:00  3cf9fd9c --w-  IO.INC
+   3150  DeflatN   1011  68%  09-30-93  11:00  8186a8c7 --w-  GEN.INC
+   3937  DeflatN   1099  73%  09-30-93  11:00  d638a846 --w-  BUFFERS.INC
+   3971  DeflatN   1286  68%  06-02-94  16:32  cfe75f4c --w-  WIN.INC
+   1136  DeflatN    478  58%  06-02-94  16:33  8c3d1a36 --w-  WINIMG.ASM
+    363  DeflatN    247  32%  06-02-94  16:34  8c5bd3a2 --w-  WIN.OPL
+    269  DeflatN    153  44%  06-02-94  17:59  d4fe5bc6 --w-  STATE.RST
+    776  DeflatN    480  39%  06-02-94  16:38  a4eccbac --w-  S3OBJ.OPO
+  13071  DeflatN   5166  61%  06-02-94  17:37  0cc166ad --w-  S3ASM.DOC
+   1113  DeflatN    498  56%  06-02-94  17:46  0143ab59 --w-  WIN.ASM
+    549  DeflatN    275  50%  06-02-94  17:52  81f0d9b5 --w-  INSTALL.BAT
+    938  DeflatN    357  62%  06-02-94  17:59  5ed71cc1 --w-  READ.ME
+ ------          ------  ---                                  -------
+  79326           35143  56%                                       18

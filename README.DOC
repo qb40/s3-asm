@@ -1,0 +1,548 @@
+                      S3Asm
+
+                  Version 2.00C
+
+
+  Copyright Giles Goddard and Krister Wombell 1994
+
+
+Introduction:
+------------
+
+ S3Asm is an 8086 machine code assembler for Psion Series3a pocket
+computer. The bulk of the program is written in 8086, so its capable
+of very high assembly speeds. 
+
+ Machine code compiled using S3Asm can be incorporated into OPL
+programs or can be translated into an image file ready for running
+from the System screen.
+
+
+
+WARNING:
+
+ Extreme caution should be taken when using this program, if the code
+you have just assembled has a bug, it could and most often does, crash 
+the machine. Also, S3Asm holds NO WARRANTY. If the bug is caused by S3Asm 
+itself not assembling correctly, then neither us (the authors) or Psion 
+can be held responsible for any loss of data or damaged caused to you, your
+machine or anything else in near proximity.
+
+
+Registration:
+-------------
+
+ This version of S3Asm is fully functional, the only limitation is
+the size of the output object code. This is set 256 bytes, which is
+more than enough for most small programs. If you would like to 
+assemble larger programs or if you just want to show your appreciation 
+for this software please register it by either,
+
+Sending 10 UK pounds to:
+
+ Giles Goddard,
+ 6, Court Royal Mews,
+ Northlands Road,
+ Southampton. SO3
+ England.
+
+Or,
+
+ Typing GO SWREG on Compuserve and following the prompts. S3Asm's
+registration code is 2703 and it costs 20.00 dollars.
+
+
+Installation:
+------------
+
+If you have RFM installed you may prefer to use the PC batch file
+Install.bat to setup S3Asm. It assumes you have the s3a connected and 
+ready. Otherwise just follow these simple steps:
+
+Copy S3Asm.opa into an \APP directory on your Series3a, any drive will 
+do, and install it by pressing Psion-I from the system screen.
+
+If everything is well you should have the S3Asm icon with S3Asm
+written underneath.
+
+Next, make a directory on any drive called \ASM which holds the
+source files for any machine code you write. 
+
+copy s3obj.opl to \OPL 
+copy s3obj.opo to \OPO
+
+These files are used to load object code into your OPL programs.
+
+
+If you would like to use the example source and EPOC service include
+files then please:
+
+Make another directory called \INC which holds the include files.
+copy *.inc to \INC 
+copy *.asm to \ASM
+copy win.opl to \OPL
+
+Selecting one of the example files that should appear under the S3Asm 
+icon by pressing enter will run S3Asm using that file.
+
+
+
+Usage:
+-----
+
+ When you run S3Asm you should be presented with a menu of commands,
+these are:
+
+
+Open file - Change the current source file.  
+
+Setup     - Change the intialisation file for S3Asm.
+Reset     - Reset intialisation file to default settings.
+
+Assemble  - Start assembling the current source file.
+
+Register  - Register S3Asm to assemble larger files and to the remove 
+            nag screen.
+About     - Show information about S3Asm.
+Exit      - Exit S3Asm
+
+
+
+Setup:
+-----
+
+The setup file for S3Asm is 'M:\OPD\s3asm.ini' it is created 
+automagically and reset to the default settings when you first run S3Asm. 
+You can change these settings using the Setup menu command.
+
+Memory:
+
+Amount of memory allocated for source block. S3Asm loads your source
+file in small chunks or blocks. If you dont have enough memory on
+your machine for the default setting, you can reduce the amount
+allocated.
+
+Amount of memory allocated for object block. This is the maximum size
+of you object code output. For non-registered users this is limited
+to 256 bytes.
+
+Amount of memory allocated for symbols. Everytime you define a label,
+equate or variable the name gets added to the symbol list. This is 
+the total memory available for all your symbols names.
+
+Amount of memory allocated for Forward References. If you reference a
+label or variable which has been defined later on in the source file,
+S3Asm stores this reference in the FR block and then later adjusts
+the object code.
+
+Amount of  memory allocated for relocations. If you use non-relative
+addresses, such as referencing a variable or address of a variable
+then S3Asm stores this information into the relocation block. When you 
+use the object file in your OPL program, the relocation is automatically 
+done for you.
+
+Amount of memory for macros. Macros take up memory whenever they are
+defined, this lets adjust the maximum amount of memory for all the
+macros.
+
+
+Directories:
+
+S3Asm normally writes all of its output files back into the directory
+from where the source file came from. You can override this for each
+output file type.
+
+Binary files, .BIN files that use loaded into your OPL programs.
+
+Image file, .IMG files that can be run from the system screen.
+
+OPL files, .OPL files that can be included into your OPL programs and
+compiled.
+(Warning: It can be dangerous to set this to your main \OPL
+directory, where S3Asm may write over an existing OPL file of the
+same name.)
+
+
+Image files:
+The intitial stack size and priority used when creating image files
+may be changed.
+
+
+
+
+
+Creating source files:
+----------------------
+
+Source files may be created using the built in Program application.
+The easiest way of doing this is by installing the Asm.als file included 
+with S3Asm, which makes a 'virtual' copy of Program and tells it to use 
+the directory \ASM and files with the .ASM extension. Copy the file 
+Asm.als into a \APP and install it using Psion-I. You can then create 
+and edit files the same way as you would OPL files.
+
+
+
+Assembling source files:
+------------------------
+
+When you assemble a source file S3asm asks you which type of output
+you would like, this can be Binary, OPL or Image. This can be made 
+automatic by placing the word BINARY, OPL or IMAGE at the top of your 
+source file, eg.
+
+    BINARY
+
+    mov ax,0
+
+    retf
+
+or,
+
+    OPL
+
+    mov ax,0
+
+    retf
+
+or,    
+
+    IMAGE
+
+somedata
+    dw 1234
+
+    CODE   
+    mov ax,0
+    retf
+
+
+Notice the CODE line in the last example. This tells S3Asm where your
+actual program starts. Image files are split into 2 parts, the Data
+segment and Code segment. All variables and other data should be
+placed before the CODE statment. 
+
+If you select OPL output then S3Asm will ask you to give it a
+variable name. This variable is used to put object code into, see
+below for more details.
+
+
+
+Note: The option to write out Image file types at the end of assembly
+is just included for completeness. If you select this option you will 
+be warned that you have no IMAGE statement in your code.
+
+
+Assembler syntax:
+----------------
+
+S3Asm tries to keep to standard 8086 assembler syntax where possible.
+
+Comments must start with a  ';'  unless they come after the end of
+the instruction ie.
+
+; This  is ok
+
+    mov ax,0  ; so is this
+    mov ax,1  and this
+
+but this is not
+
+
+
+
+
+Instruction format:
+
+Instructions and data declarations must be preceeded by at least one
+space or tab, ie.
+  
+ mov ax,1 ; is ok
+mov ax,1 ; is bad
+
+Labels and equates:
+
+Labels and equates must start a line, ie. no spaces or tabs before
+them, ie.
+
+    mylabel  mov ax,0   ; is bad
+
+mylabel  mov ax,0       ; is ok
+
+
+Labels and equates must start with a non digit and can be upto 255
+bytes long. ie.
+
+6label dw 0            ; is bad
+
+label6 dw 0            ; is ok
+
+datapp1 equ $28   ; is ok
+
+
+Also, for future versions please dont use labels with these
+characters:
+
+ - * , / + = % ! & > < $ " 
+
+
+
+References to labels must be enclosed in square brackets, eg.
+
+   mov ax,[a_label]
+
+
+
+Addresses of labels use the OFFSET syntax, eg.
+
+  mov bx, offset a_label
+
+  mov ax,[bx]
+
+
+
+Absolute addresses use the ABS syntax, eg.
+
+  mov ax, ABS [datapp1]
+
+
+
+
+
+Data:
+
+ There are 3 types of data statement:
+
+  db 0
+  dw 0
+  db "A string",0
+
+
+
+
+Numbers:
+
+ ASCII, Decimal, Hex and Binary numbers are supported, they have the
+following syntax:
+
+
+
+    mov ax,1234    ; a decimal number
+
+    mov ax,$5678   ; a hex number
+
+    mov ax,%0101   ; a binary number
+
+    mov al,"a"     ; an ASCII character must be surrounded by quotes
+
+
+
+Macros:
+
+ Macros can be defined as such;
+
+Name MACRO
+     mov ax,!0  ; move 1st parameter into ax
+     mov ax,!1  ; move 2nd parameter into ax
+     ENDM
+
+!0 to !9 are used to reference parameters, !0 being the 1st, !9 the 10th.
+
+To envoke the macro use;
+    name parameter1,parameter2.... 
+
+eg.
+
+increg MACRO
+    inc !0
+    ENDM
+
+    increg ax
+
+Macros cannot be nested.
+
+
+
+
+
+Include files:
+
+Include files can contain machine code, data, macros, equates or indeed 
+anything that you would use normaly in a source file. They must be 
+placed at the top of your main source file and cannot be nested. ig.
+
+  include "m:\inc\win.inc"
+
+
+The standard convention for include filenames is to have a .INC
+extension and to be placed in a \INC directory.
+
+
+
+Epoc functions:
+
+S3Asm has a special instruction for defining EPOC service interupts.
+Its syntax is such:
+
+Name  EPOC  Function number, Int number, register1, register2....
+
+eg.
+
+HeapAllocateCell    EPOC   $00,$81,cx
+
+    HeapAllocateCell  1000
+
+
+And would expand out to be;
+
+    mov cx,1000
+    mov ah,$81
+    int $81
+
+
+
+
+How to use your assembled file:
+------------------------------
+
+ As mentioned earlier, S3Asm can output 3 types of file; Binary, OPL
+and Image.
+
+Binary files (with extensions .BIN) can be loaded into your OPL
+programs using the Procedure LoadO: (fname$), which is included in
+the S3Obj.opl file. A typical example would be;
+
+
+    Global ass%
+
+    LoadM ("m:\opo\s3obj.opo")
+
+    ass%=LoadO:("m:\asm\win.bin")
+    if ass%=0  : Alert ("Unable to load binary file")  :  endif
+
+    usr(ass%,0,0,0,0)
+
+
+LoadO: attempts to load the file, allocate enough memory to hold it
+and then relocate any references that need to be. It returns a
+pointer to the start of the machine code, which you then use to USR
+to.
+LoadO: returns a 0 if it cannot load the file for any reason. It also
+Raises an error if there are any file errors. You could trap these
+errors using the OPL command ONERR, to jump to your own error
+handler.
+
+
+S3Asm's OPL output files can be included into your OPL source code. 
+
+  Global ass%
+  Global a&(6)
+
+  a&(1)=&73413353
+  a&(2)=&4C504F6D
+  a&(3)=&00000010
+  a&(4)=&201B0000
+  a&(5)=&00CB0001
+  a&(6)=&00000000
+
+  LoadM ("a:\opo\s3obj.opo")
+
+  ass%=Reloc:(addr(a&()))
+  if ass%=0 : Alert ("Cannot relocate") : endif
+
+  usr(ass%,0,0,0,0)
+
+
+Reloc: attempts to relocate any references that need to be. It
+returns a pointer to the start of the machine code, which you then
+use in the USR function. 
+Like LoadO: you can use ONERR to trap any errors produced by Reloc:
+
+Both the above procedures may be be copied and used in your OPL
+source code freely. The original OPL source file for these procedures
+can be found in S3Obj.opl
+
+
+Image files should be copied into a \IMG directory and can be run
+using the RunImg standard application. 
+
+Note: There will be a utility available soon to registered users that
+allows .APP files to be created from these .IMG files.
+
+
+Example files:
+-------------
+
+S3Asm comes with some example files to help you get the jist of whats
+going on. They are:
+
+win.asm - Open a window and bitmap, and draw directly using 8086.
+win.opl - After you have assembled the above file, you can load it
+          using this OPL program.
+
+winimg.asm - This is the same as the above, except it is a stand
+             alone Image file version. Use RunImg to run it.
+	     (Note: At the time of writing, this only works in 
+                    series3 compatability mode)
+
+
+Please take a look at what they do and how they work.
+
+
+Using the Epoc include files:
+-----------------------------
+
+Most if not all of the EPOC service interrupts are included in the
+following files:
+
+buffers.inc  
+dbf.inc      
+gen.inc      
+io.inc       
+mem.inc      
+proc.inc     
+win.inc      
+
+Please read the relevent SDK documentation for full details.
+
+
+
+Bugs and Contact:
+----------------
+
+Please send any bugs, suggestions or hellos to:
+
+Giles Goddard at
+
+gsg@cix.compulink.co.uk
+Compuserve - 71125,532
+giles@twics.co.jp
+
+or
+
+Krister Wombell at
+
+kristerw@cix.compulink.co.uk
+
+
+(thanks to dw2@Psion for his help and advice)
+
+
+
+
+Disclaimer
+----------
+Neither us (the authors) or Psion can be held responsible for any loss 
+of data or damaged caused to you, your machine or anything else in 
+near proximity caused directly or indirectly by S3Asm or its
+associated programs.
+
+S3Asm is copyright Giles Goddard and Krister Wombell 1994
+
+This zip file may be distributed freely as long as all files
+are kept together in their original form.
+
+
+
+END OF FILE
+
